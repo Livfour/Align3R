@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 from copy import deepcopy
 import cv2
-
+from pathlib import Path
 import numpy as np
 import torch
 import torch.nn as nn
@@ -68,6 +68,7 @@ class BasePCOptimizer (nn.Module):
                          pw_break=20,
                          rand_pose=torch.randn,
                          empty_cache=False,
+                         masks_dir=None,
                          verbose=True):
         super().__init__()
         if not isinstance(view1['idx'], list):
@@ -155,7 +156,10 @@ class BasePCOptimizer (nn.Module):
                 idx = view2['idx'][v]
                 img_pathes[idx] = view2['instance'][v]
             self.img_pathes = img_pathes
-
+        
+        if masks_dir is not None:
+            self.masks_dir = Path(masks_dir)
+        
     @property
     def n_edges(self):
         return len(self.edges)
