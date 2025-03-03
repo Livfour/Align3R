@@ -68,6 +68,7 @@ class BasePCOptimizer (nn.Module):
                          pw_break=20,
                          rand_pose=torch.randn,
                          empty_cache=False,
+                         use_self_mask=True,
                          masks_dir=None,
                          verbose=True):
         super().__init__()
@@ -157,7 +158,9 @@ class BasePCOptimizer (nn.Module):
                 img_pathes[idx] = view2['instance'][v]
             self.img_pathes = img_pathes
         
-        if masks_dir is not None:
+        
+        if not use_self_mask and masks_dir is not None:
+            self.use_self_mask = False
             self.masks_dir = Path(masks_dir)
         
     @property

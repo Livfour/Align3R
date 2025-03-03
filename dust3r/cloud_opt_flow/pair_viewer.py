@@ -74,6 +74,15 @@ class PairViewer (BasePCOptimizer):
         self.focals = nn.Parameter(torch.tensor(self.focals), requires_grad=False)
         self.pp = nn.Parameter(torch.stack(self.pp, dim=0), requires_grad=False)
         self.depth = nn.ParameterList(self.depth)
+        if not self.use_self_mask:
+            from natsort import natsorted
+            import cv2
+            self.dynamic_masks = []
+            mask_paths = natsorted(self.masks_dir.glob('*.npy'))
+            for mask_path, (h, w) in zip(mask_paths, self.imshapes):
+                mask = torch.tensor(cv2.resize(np.load(mask_path), (w, h))).to("cuda", dtype=torch.bool)
+                self.dynamic_masks.append(mask)
+                self.dynamic_masks.append(mask)
         for p in self.parameters():
             p.requires_grad = False
 
