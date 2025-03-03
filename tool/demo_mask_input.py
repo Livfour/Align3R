@@ -151,7 +151,7 @@ def get_reconstructed_scene(args, outdir, model, device, silent, image_size, fil
                                num_total_iter=niter, empty_cache= len(filelist) > 72, masks_dir=args.masks_dir)
     else:
         mode = GlobalAlignerMode.PairViewer
-        scene = global_aligner(output, device=device, mode=mode, verbose=not silent)
+        scene = global_aligner(output, device=device, mode=mode, verbose=not silent, use_self_mask=not use_gt_mask, masks_dir=args.masks_dir)
     lr = 0.01
 
     if mode == GlobalAlignerMode.PointCloudOptimizer:
